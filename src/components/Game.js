@@ -5,6 +5,8 @@ import AriaModal from "react-aria-modal";
 import { Redirect } from 'react-router-dom';
 import he from "he";
 
+import LoadingSpinner from "./LoadingSpinner";
+
 
 const Wrapper = styled.main`
 margin-top: 50px;
@@ -63,6 +65,11 @@ flex-direction: column;
 .question{
   max-width: 800px;
 }
+.question:focus, .whatQuestion:focus , .modalH1:focus, .modalH2:focus{
+  outline: none;
+  text-decoration: underline;
+}
+
 .answer{
   position: relative;
   width: 380px;
@@ -153,6 +160,15 @@ button:hover > .underline{
   width: 150px;
   background-color: rgba(245, 91, 20, .1);
 }
+.modalFlex{
+  display:flex;
+  align-items: space-around;
+  justify-content: space-around;
+  width: 150px;
+}
+.modalFlex > h3{
+  margin: 0;
+}
 .underlineStyle{
   position: absolute;
   bottom: 0;
@@ -160,6 +176,12 @@ button:hover > .underline{
   height: 2px;
   background: rgb(245,91,20);
   background: linear-gradient(80deg, rgba(245,91,20,1) 0%, rgba(245,91,20,1) 15%, rgba(255,252,0,1) 100%);
+}
+
+.loadFlex{
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 `
 
@@ -170,21 +192,19 @@ function Game(props){
   const [activateModal, setModal] = useState(false);
   const [correctAnswers, setCorrect] = useState(0);
   const [redirectTo, setRedirect] = useState("");
+  const [loading, setLoading] = useState(false)
   const titleRef = useRef(null);
 
   if(!localStorage.getItem("saveData")){
     localStorage.setItem("saveData", JSON.stringify({gamesPlayed : 0, correctAnswers : 0, incorrectAnswers : 0}))
   }
 
-  let redirect;
-  if(redirectTo){
-    redirect = (<Redirect to={redirectTo} />);
-  }
-
   function GetQuestions(e){
     e.preventDefault();
+    setLoading(true);
     axios.get("https://opentdb.com/api.php?amount=10")
     .then((response) => {
+      setLoading(false);
       setIndex(0);
       setQuestions(response.data.results);
       showQuestion(response.data.results[indexState]);
@@ -196,6 +216,7 @@ function Game(props){
     })
     .catch((error) => {
       console.log(error);
+      setLoading(false);
     })
   }
 
@@ -209,7 +230,6 @@ function Game(props){
     }
     for(let i = 0; i < amount; i++){
       let randomNumber = Math.floor(Math.random() * Math.floor(answers.length));
-      console.log(randomNumber);
       randomAnswers[i] = answers[randomNumber];
       answers.splice(randomNumber, 1);
     }
@@ -233,58 +253,70 @@ function Game(props){
       }
     }
     if(indexState === 9 && activateModal === false){
-      console.log("u did it!")
       setModal(true);
       return;
     }
     showQuestion(questions[indexState + 1]);
     setIndex(indexState + 1);
   }
-
+  
   useEffect(() => {
-    if(questions.length > 0 && indexState < 9){
+    if(questions.length > 0 && indexState < 10){
       titleRef.current.focus();
     }
   }, [indexState, questions])
-
+  
   function modalButtons(e){
-    console.log("hello")
     setModal(false);
     if(e){
       setRedirect(e.target.value);
     }
   }
-
   function restartGame(){
     setCorrect(0);
     setQuestions([]);
     setModal(false);
     setIndex(0);
   }
-  console.log(redirectTo);
+
+  let redirect;
+  if(redirectTo){
+    redirect = (<Redirect to={redirectTo} />);
+  }
+  console.log("game RENDER");
+
+  if(loading){
+    return(
+      <Wrapper><div className="loadFlex"><LoadingSpinner /></div></Wrapper>
+    )
+  }
 
   if(questions.length > 0){
       const modal = activateModal ? (
       <AriaModal
         className="modal"
-        titleText="demo one"
+        titleText="dialog"
         initialFocus="#focus"
+        role="dialog"
         underlayStyle={{ paddingTop: '3em' }}
       >
         <Wrapper>
-          {redirect}
           <div className="overAllModal">
-            <h1 style={{marginTop: "0px"}} id="focus" tabIndex="0" aria-label="Game Finished">Game Finished!</h1>
-            <h2 tabIndex="0" aria-label={"scored " + correctAnswers + "out of ten"}>score : {correctAnswers + " / 10"}</h2>
+            <h1 className="modalH1" style={{marginTop: "0px"}} id="focus" tabIndex="0" aria-label="Game Finished">Game Finished!</h1>
+            <h2 className="modalH2" tabIndex="0" aria-label={"scored " + correctAnswers + "out of ten"}>score : {correctAnswers + " / 10"}</h2>
             <div className="buttonWrapper">
               <button className="modalButton" onClick={(e) => modalButtons(e)} value="/stats">
-                <span className="material-icons">bar_chart</span>
-                Stats
+                <div className="modalFlex">
+                  <span className="material-icons">bar_chart</span>
+                  <h3>Stats</h3>
+                </div>
                 <div className="modalUnderline"></div>
               </button>
               <button className="modalButton" onClick={restartGame} value="/game">
-                <span className="material-icons">autorenew</span>
-                Restart
+                <div className="modalFlex">
+                  <span className="material-icons">autorenew</span>
+                  <h3>Restart</h3>
+                </div>
                 <div className="modalUnderline"></div>
               </button>
             </div>
@@ -299,6 +331,7 @@ function Game(props){
       <Wrapper>
         {redirect}
         <h3
+          className="whatQuestion"
           ref={titleRef}
           tabIndex="0" 
           aria-label={"question " + (indexState + 1)}
@@ -313,7 +346,7 @@ function Game(props){
         <form className="overQuestion">
           {thisQuestion.map((index) => {
             return (
-            <button onClick={(e) => OnAnswer(e, index)} tabIndex="0" aria-label={index} className="answer" key={index}>
+            <button onClick={(e) => OnAnswer(e, index)} tabIndex="0" aria-label={he.decode(index)} className="answer" key={index}>
               <h3>{he.decode(index)}</h3>
               <div className="underline"></div>
               <div className="underUnderline"></div>
@@ -328,7 +361,6 @@ function Game(props){
 
   return(
     <Wrapper>
-      {redirect}
       <h1>Game</h1>
       <form>
         <button className="startBtn" type="submit" onClick={(e) => GetQuestions(e)}>Start!

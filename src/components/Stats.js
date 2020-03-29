@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.main`
@@ -51,13 +51,13 @@ function Stats(props){
     return(
       <Wrapper>
         <div tabIndex="0" className="overall">
-          <h2>GAMES PLAYED</h2>
-          <h2>{saveData.gamesPlayed}</h2>
-          <h2>CORRECT ANSWERS</h2>
-          <h2>{saveData.correctAnswers}</h2>
-          <h2>INCORRECT ANSWERS</h2>
-          <h2>{saveData.incorrectAnswers}</h2>
-          <h2>CORRECT PRESENTAGE</h2>
+          <h2>GAMES PLAYED:</h2>
+          <h2 aria-label={saveData.gamesPlayed + ","}>{saveData.gamesPlayed}</h2>
+          <h2>CORRECT ANSWERS:</h2>
+          <h2 aria-label={saveData.correctAnswers + ","}>{saveData.correctAnswers}</h2>
+          <h2>INCORRECT ANSWERS:</h2>
+          <h2 aria-label={saveData.incorrectAnswers + ","}>{saveData.incorrectAnswers}</h2>
+          <h2>CORRECT PRESENTAGE:</h2>
           <h2 
             aria-label={Math.round(saveData.correctAnswers / (saveData.correctAnswers + saveData.incorrectAnswers) * 100) + "percent"}>
               {Math.round(saveData.correctAnswers / (saveData.correctAnswers + saveData.incorrectAnswers) * 100) + "%"}

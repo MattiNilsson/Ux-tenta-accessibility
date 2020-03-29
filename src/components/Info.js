@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function Info(props){
-  const Wrapper = styled.main`
+const Wrapper = styled.main`
   display:flex; 
   align-items: center;
   justify-content:center;
@@ -39,6 +38,9 @@ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.36);
     background: linear-gradient(80deg, rgba(245,91,20,1) 0%, rgba(245,91,20,1) 15%, rgba(255,252,0,1) 100%);
   }
   `
+
+function Info(props){
+  console.log("render")
   return(
     <Wrapper>
       <div className="overall" tabIndex="0">

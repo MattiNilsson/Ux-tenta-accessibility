@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
 
 import SideBar from "./SideBar";
@@ -61,7 +61,7 @@ function Header(props){
   function onClickSidebar(){
     setSidebar(!sidebarHidden);
   }
-  
+  console.log("header render")
   return(
     <Wrapper aria-label="header">
       <button aria-label={sidebarHidden ? "Open Sidebar" : "Close Sidebar"} className="hamburgerMenuButton" onClick={onClickSidebar}>

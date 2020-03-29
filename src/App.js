@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import styled from "styled-components";
-import logo from './logo.svg';
 import './App.css';
 
 import Header from "./components/Header";

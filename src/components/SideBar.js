@@ -87,7 +87,7 @@ function SideBar(props){
     setRedirect(e.target.value);
   }
 
-  let redirect
+  let redirect;
   if(redirectTo){
     redirect = (<Redirect to={redirectTo} />);
   }
@@ -95,6 +95,12 @@ function SideBar(props){
   useEffect(() => {
     focusRef.current.focus();
   }, [sidebarHidden])
+
+  if(!sidebarHidden){
+    redirect = "";
+  }
+
+  console.log("SIDEBAR REDIRECT", redirectTo)
 
   return(
     <Wrapper aria-label="Sidebar" isHidden={sidebarHidden}>
