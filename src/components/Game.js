@@ -287,7 +287,7 @@ function Game(props){
 
   if(loading){
     return(
-      <Wrapper><div className="loadFlex"><LoadingSpinner /></div></Wrapper>
+      <Wrapper><div className="loadFlex"><LoadingSpinner variant={"dots"}/></div></Wrapper>
     )
   }
 

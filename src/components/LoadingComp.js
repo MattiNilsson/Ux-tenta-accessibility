@@ -15,9 +15,6 @@ const smallToBig = keyframes`
   30%{
     background-color: #f55b14;
   }
-  60%{
-    background-color: #80260d;
-  }
   80%{
     opacity: .1;
   }
@@ -27,23 +24,17 @@ const smallToBig = keyframes`
   }
 `
 
-const BigToSmall = keyframes`
-  from{
-    transform: scale(2);
-  }
-  to{
-    transform: scale(1);
-  }
-`
-
 const Wrapper = styled.div`
   .orb{
     height: 10px;
     width: 10px;
     border-radius: 15px;
-    background-color: rgba(0,0,0,0);
+    opacity: 0;
     animation: ${smallToBig} .8s linear infinite;
     animation-delay: ${props => props.delay + "s"};
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(245,91,20,1);
+-moz-box-shadow: 0px 0px 5px 0px rgba(245,91,20,1);
+box-shadow: 0px 0px 5px 0px rgba(245,91,20,1);
   }
 
 
