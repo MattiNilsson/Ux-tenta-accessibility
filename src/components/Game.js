@@ -170,6 +170,7 @@ button:hover > .underline{
   align-items: space-around;
   justify-content: space-around;
   width: 150px;
+  pointer-events: none;
 }
 .modalFlex > h3{
   margin: 0;
@@ -204,6 +205,11 @@ function Game(props){
   const [redirectTo, setRedirect] = useState("");
   const [loading, setLoading] = useState(false)
   const titleRef = useRef(null);
+
+  const [focusButton, setButton] = useState(0);
+  const buttonsRef = useRef([]);
+
+  console.log(buttonsRef)
 
   if(!localStorage.getItem("saveData")){
     localStorage.setItem("saveData", JSON.stringify({gamesPlayed : 0, correctAnswers : 0, incorrectAnswers : 0}))
@@ -266,6 +272,7 @@ function Game(props){
       setModal(true);
       return;
     }
+    setButton(0);
     showQuestion(questions[indexState + 1]);
     setIndex(indexState + 1);
   }
@@ -275,6 +282,48 @@ function Game(props){
       titleRef.current.focus();
     }
   }, [indexState, questions])
+
+  useEffect(() => {
+    if(questions.length > 0){
+      buttonsRef.current[focusButton].focus();
+    }
+  }, [focusButton])
+
+  function arrowKeys(e){
+    if(thisQuestion.length === 4){
+      if(!e.shiftKey && e.keyCode === 9 && focusButton < 3){
+        setButton(focusButton + 1);
+      }else if(e.shiftKey && e.keyCode === 9 && focusButton > 0){
+        setButton(focusButton - 1);
+      }
+
+      if(e.keyCode === 37 && focusButton > 0){
+        setButton(focusButton - 1)
+      }
+      if(e.keyCode === 38 && focusButton > 1){
+        setButton(focusButton - 2)
+      }
+      if(e.keyCode === 39 && focusButton < 3){
+        setButton(focusButton + 1)
+      }
+      if(e.keyCode === 40 && focusButton < 2){
+        setButton(focusButton + 2)
+      }
+    }else if(thisQuestion.length === 2){
+      if(!e.shiftKey && e.keyCode === 9 && focusButton < 1){
+        setButton(focusButton + 1);
+      }else if(e.shiftKey && e.keyCode === 9 && focusButton > 0){
+        setButton(focusButton - 1);
+      }
+
+      if(e.keyCode === 37 && focusButton > 0){
+        setButton(focusButton - 1)
+      }
+      if(e.keyCode === 39 && focusButton < 1){
+        setButton(focusButton + 1)
+      }
+    }
+  }
   
   function modalButtons(e){
     setModal(false);
@@ -361,9 +410,17 @@ function Game(props){
         >{ he.decode(questions[indexState].question) }
         </h2>
         <form className="overQuestion">
-          {thisQuestion.map((index) => {
+          {thisQuestion.map((index, id) => {
             return (
-            <button onClick={(e) => OnAnswer(e, index)} tabIndex="0" aria-label={he.decode(index)} className="answer" key={index}>
+            <button id={id} 
+              onKeyDown={(e) => arrowKeys(e)}
+              ref={el => buttonsRef.current[id] = el} 
+              onClick={(e) => OnAnswer(e, index)} 
+              tabIndex="0" 
+              aria-label={he.decode(index)} 
+              className="answer" 
+              key={index}
+            >
               <h3>{he.decode(index)}</h3>
               <div className="underline"></div>
               <div className="underUnderline"></div>

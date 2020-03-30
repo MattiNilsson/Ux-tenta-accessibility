@@ -103,22 +103,22 @@ function SideBar(props){
   console.log("SIDEBAR REDIRECT", redirectTo)
 
   return(
-    <Wrapper aria-label="Sidebar" isHidden={sidebarHidden}>
+    <Wrapper role="navigation" aria-label="Sidebar" isHidden={sidebarHidden}>
       {redirect}
       <div className="listOfOptions">
-        <button ref={focusRef} aria-label="Game" onClick={(e) => onClickTest(e)} value="/game" disabled={sidebarHidden}>
+        <button ref={focusRef} aria-label="Game" role="navigation" onClick={(e) => onClickTest(e)} value="/game" disabled={sidebarHidden}>
           <span className="material-icons" unselectable="on">videogame_asset</span>
           <h3 unselectable="on" >Game</h3>
           <div className="underline" unselectable="on"></div>
         </button>
 
-        <button aria-label="Stats" onClick={(e) => onClickTest(e)} value="/stats" disabled={sidebarHidden}>
+        <button aria-label="Stats" role="navigation" onClick={(e) => onClickTest(e)} value="/stats" disabled={sidebarHidden}>
           <span className="material-icons">bar_chart</span>
           <h3>Stats</h3>
           <div className="underline"></div>
         </button>
 
-        <button aria-label="Info" onClick={(e) => onClickTest(e)} value="/info" disabled={sidebarHidden}>
+        <button aria-label="Info" role="navigation" onClick={(e) => onClickTest(e)} value="/info" disabled={sidebarHidden}>
           <span className="material-icons">help_outline</span>
           <h3>About this app</h3>
           <div className="underline"></div>

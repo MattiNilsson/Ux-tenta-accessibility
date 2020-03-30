@@ -44,6 +44,7 @@ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.36);
     font-size: 40px;
     top: -60px;
     left: -250px;
+    speak: none;
   }
   p{
     margin-top: 0;
@@ -57,9 +58,9 @@ function Info(props){
       <Helmet>
         <title>Quiz : Info</title>
       </Helmet>
-      <div className="overall" tabIndex="0">
+      <div role="article" className="overall" tabIndex="0">
         <h1>About this app.</h1>
-        <span className="material-icons icon">help_outline</span>
+        <span aria-hidden="true" className="material-icons icon">help_outline</span>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <p>- Lorem Ipsum .inc</p>
         <div className="bottomBorder"></div>
