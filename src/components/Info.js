@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 const Wrapper = styled.main`
   display:flex; 
@@ -37,14 +38,28 @@ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.36);
     background: rgb(245,91,20);
     background: linear-gradient(80deg, rgba(245,91,20,1) 0%, rgba(245,91,20,1) 15%, rgba(255,252,0,1) 100%);
   }
+  .icon{
+    position: relative;
+    color: white;
+    font-size: 40px;
+    top: -60px;
+    left: -250px;
+  }
+  p{
+    margin-top: 0;
+  }
   `
 
 function Info(props){
   console.log("render")
   return(
     <Wrapper>
+      <Helmet>
+        <title>Quiz : Info</title>
+      </Helmet>
       <div className="overall" tabIndex="0">
         <h1>About this app.</h1>
+        <span className="material-icons icon">help_outline</span>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <p>- Lorem Ipsum .inc</p>
         <div className="bottomBorder"></div>

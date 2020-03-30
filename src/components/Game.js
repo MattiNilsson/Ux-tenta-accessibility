@@ -5,11 +5,13 @@ import AriaModal from "react-aria-modal";
 import { Redirect } from 'react-router-dom';
 import he from "he";
 
+import { Helmet } from "react-helmet";
+
 import LoadingSpinner from "./LoadingSpinner";
 
 
 const Wrapper = styled.main`
-margin-top: 50px;
+margin-top: 100px;
 position:relative;
 display:flex;
 justify-content: center;
@@ -64,6 +66,8 @@ flex-direction: column;
 }
 .question{
   max-width: 800px;
+  letter-spacing: 1px;
+  line-height: 1.5;
 }
 .question:focus, .whatQuestion:focus , .modalH1:focus, .modalH2:focus{
   outline: none;
@@ -74,17 +78,18 @@ flex-direction: column;
   position: relative;
   width: 380px;
   margin: 5px;
-  height: 50px;
+  height: 100px;
   background-color: rgba(0,0,0,0);
   border: none;
   outline: none;
+  letter-spacing: 2px;
 }
 .underline{
   position:absolute;
   left: 0;
   bottom: 0;
   pointer-events: none;
-  height: 50px;
+  height: 100px;
   width: 0px;
   border-bottom: 2px solid #f55b14;
   background-color: rgba(245, 91, 20, 0);
@@ -168,6 +173,7 @@ button:hover > .underline{
 }
 .modalFlex > h3{
   margin: 0;
+  letter-spacing: 1px;
 }
 .underlineStyle{
   position: absolute;
@@ -179,9 +185,13 @@ button:hover > .underline{
 }
 
 .loadFlex{
+  margin-top: 50px;
   display:flex;
   justify-content: center;
   align-items: center;
+}
+.modalH1, .modalH2{
+  letter-spacing: 1px;
 }
 `
 
@@ -281,6 +291,7 @@ function Game(props){
 
   let redirect;
   if(redirectTo){
+    console.log("REDIRECT")
     redirect = (<Redirect to={redirectTo} />);
   }
   console.log("game RENDER");
@@ -301,6 +312,9 @@ function Game(props){
         underlayStyle={{ paddingTop: '3em' }}
       >
         <Wrapper>
+          <Helmet>
+            <title>Quiz : Game Modal</title>
+          </Helmet>
           <div className="overAllModal">
             <h1 className="modalH1" style={{marginTop: "0px"}} id="focus" tabIndex="0" aria-label="Game Finished">Game Finished!</h1>
             <h2 className="modalH2" tabIndex="0" aria-label={"scored " + correctAnswers + "out of ten"}>score : {correctAnswers + " / 10"}</h2>
@@ -330,6 +344,9 @@ function Game(props){
     return(
       <Wrapper>
         {redirect}
+        <Helmet>
+          <title>Quiz : Question {"" + (indexState + 1)}</title>
+        </Helmet>
         <h3
           className="whatQuestion"
           ref={titleRef}
@@ -361,6 +378,9 @@ function Game(props){
 
   return(
     <Wrapper>
+      <Helmet>
+          <title>Quiz : Start Game</title>
+      </Helmet>
       <h1>Game</h1>
       <form>
         <button className="startBtn" type="submit" onClick={(e) => GetQuestions(e)}>Start!

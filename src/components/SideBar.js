@@ -108,7 +108,7 @@ function SideBar(props){
       <div className="listOfOptions">
         <button ref={focusRef} aria-label="Game" onClick={(e) => onClickTest(e)} value="/game" disabled={sidebarHidden}>
           <span className="material-icons" unselectable="on">videogame_asset</span>
-          <h3 unselectable="on">Game</h3>
+          <h3 unselectable="on" >Game</h3>
           <div className="underline" unselectable="on"></div>
         </button>
 
