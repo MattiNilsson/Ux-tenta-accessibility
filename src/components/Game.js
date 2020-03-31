@@ -332,6 +332,7 @@ function Game(props){
 
   function OnAnswer(e, rightAnswer){
     e.preventDefault();
+    setButton(0);
 
     let userAnswerNew = userAnswer;
     userAnswerNew[indexState] = rightAnswer;
@@ -344,9 +345,13 @@ function Game(props){
       setIndex(0);
       showQuestion(questions[0]);
     }
-
-    setButton(0);
   }
+
+  useEffect(() => {
+    if(questions.length > 0){
+      buttonsRef.current[focusButton].focus();
+    }
+  }, [focusButton])
   
   useEffect(() => {
     if(questions.length > 0 && indexState < 10){
@@ -364,12 +369,6 @@ function Game(props){
       }
     }
   }, [indexState, questions, userAnswer])
-
-  useEffect(() => {
-    if(questions.length > 0){
-      buttonsRef.current[focusButton].focus();
-    }
-  }, [focusButton])
 
   function arrowKeys(e){
     if(thisQuestion.length === 4){
