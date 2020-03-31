@@ -61,7 +61,7 @@ flex-direction: column;
   justify-content: center;
   align-items: center;
   max-width: 800px;
-  max-height: 400px;
+  max-height: 500px;
   flex-wrap: wrap;
 }
 .question{
@@ -194,6 +194,78 @@ button:hover > .underline{
 .modalH1, .modalH2{
   letter-spacing: 1px;
 }
+
+
+.selection{
+  position: fixed;
+  bottom: 30px;
+  width: 500px;
+  height: 50px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.superBtn{
+  width: 40px;
+  height: 40px;
+  margin-left: 2px;
+  margin-right: 2px;
+  border: solid 2px #f55b14;
+  border-radius: 50px;
+  background-color: rgba(0,0,0,0);
+  color: #f55b14;
+}
+.superBtn:hover, .superBtn:focus{
+  border-color: white;
+  color: white;
+  outline: none;
+}
+.superBtn > span{
+  font-size: 40px;
+  position: relative;
+  left: -8px;
+  top: -3px;
+}
+.superBtnMini{
+  margin-left: 4px;
+  margin-right: 4px;
+  width: 30px;
+  height: 30px;
+  border: solid 2px #f55b14;
+  border-radius: 50px;
+  background-color: rgba(0,0,0,0);
+  color: #f55b14;
+}
+.superBtnMiniPlus{
+  margin-left: 4px;
+  margin-right: 4px;
+  width: 30px;
+  height: 30px;
+  border: solid 2px white;
+  border-radius: 50px;
+  background-color: rgba(0,0,0,0);
+  color: white;
+}
+.superBtnMini > span, .superBtnMiniPlus > span {
+  position: relative;
+  left: -5px;
+}
+.superBtnMini:hover, .superBtnMini:focus, .superBtnMiniPlus:hover, .superBtnMiniPlus:focus{
+  color: white;
+  border-color: white;
+  outline: none;
+}
+
+.finishBtn{
+  position: fixed;
+  bottom: 100px;
+}
+
+.picked > .underUnderline{
+  width: 380px;
+  border-bottom: 5px solid #f55b14;
+}
+
 `
 
 function Game(props){
@@ -203,13 +275,14 @@ function Game(props){
   const [activateModal, setModal] = useState(false);
   const [correctAnswers, setCorrect] = useState(0);
   const [redirectTo, setRedirect] = useState("");
-  const [loading, setLoading] = useState(false)
-  const titleRef = useRef(null);
-
+  const [loading, setLoading] = useState(false);
+  const [correct, setCorrectArr] = useState([]);
+  const [userAnswer, setUserAnswer] = useState([null,null,null,null,null,null,null,null,null,null]);
   const [focusButton, setButton] = useState(0);
-  const buttonsRef = useRef([]);
 
-  console.log(buttonsRef)
+  const titleRef = useRef(null);
+  const buttonsRef = useRef([]);
+  const finishRef = useRef(null);
 
   if(!localStorage.getItem("saveData")){
     localStorage.setItem("saveData", JSON.stringify({gamesPlayed : 0, correctAnswers : 0, incorrectAnswers : 0}))
@@ -224,6 +297,11 @@ function Game(props){
       setIndex(0);
       setQuestions(response.data.results);
       showQuestion(response.data.results[indexState]);
+      let correctArr = [];
+      for(let i = 0; i < response.data.results.length; i++){
+        correctArr.push(response.data.results[i].correct_answer);
+      }
+      setCorrectArr(correctArr);
       if(localStorage.getItem("saveData")){
         let newSaveData = JSON.parse(localStorage.getItem("saveData"));
         newSaveData.gamesPlayed++;
@@ -254,34 +332,38 @@ function Game(props){
 
   function OnAnswer(e, rightAnswer){
     e.preventDefault();
-    if(rightAnswer === questions[indexState].correct_answer){
-      if(localStorage.getItem("saveData")){
-        let newSaveData = JSON.parse(localStorage.getItem("saveData"));
-        newSaveData.correctAnswers++;
-        localStorage.setItem("saveData", JSON.stringify(newSaveData));
-        setCorrect(correctAnswers + 1);
-      }
+
+    let userAnswerNew = userAnswer;
+    userAnswerNew[indexState] = rightAnswer;
+    setUserAnswer(userAnswerNew);
+
+    if(indexState != 9){
+      setIndex(indexState + 1);
+      showQuestion(questions[indexState + 1]);
     }else{
-      if(localStorage.getItem("saveData")){
-        let newSaveData = JSON.parse(localStorage.getItem("saveData"));
-        newSaveData.incorrectAnswers++;
-        localStorage.setItem("saveData", JSON.stringify(newSaveData));
-      }
+      setIndex(0);
+      showQuestion(questions[0]);
     }
-    if(indexState === 9 && activateModal === false){
-      setModal(true);
-      return;
-    }
+
     setButton(0);
-    showQuestion(questions[indexState + 1]);
-    setIndex(indexState + 1);
   }
   
   useEffect(() => {
     if(questions.length > 0 && indexState < 10){
       titleRef.current.focus();
     }
-  }, [indexState, questions])
+    let finished = true;
+    if(userAnswer.length === 10){
+      for(let i = 0; i < 10; i++){
+        if(userAnswer[i] === null){
+          finished = false;
+        }
+      }
+      if(finished === true){
+        finishRef.current.focus();
+      }
+    }
+  }, [indexState, questions, userAnswer])
 
   useEffect(() => {
     if(questions.length > 0){
@@ -324,6 +406,35 @@ function Game(props){
       }
     }
   }
+
+  function nextOrPrev(e, str){
+    if(str === "next" && indexState < 9){
+      setIndex(indexState + 1);
+      showQuestion(questions[indexState + 1]);
+    }
+    if(str === "prev" && indexState > 0){
+      setIndex(indexState - 1);
+      showQuestion(questions[indexState - 1]);
+    }
+  }
+
+  function finished(){
+    let amountCorrect = 0;
+    for(let i = 0; i < userAnswer.length; i++){
+      if(userAnswer[i] === correct[i]){
+        amountCorrect++;
+      }
+    }
+    if(localStorage.getItem("saveData")){
+      let newSaveData = JSON.parse(localStorage.getItem("saveData"));
+      newSaveData.correctAnswers += amountCorrect;
+      newSaveData.incorrectAnswers += (10 - amountCorrect);
+      localStorage.setItem("saveData", JSON.stringify(newSaveData));
+    }
+
+    setCorrect(amountCorrect);
+    setModal(true);
+  }
   
   function modalButtons(e){
     setModal(false);
@@ -332,6 +443,8 @@ function Game(props){
     }
   }
   function restartGame(){
+    setUserAnswer([null,null,null,null,null,null,null,null,null,null]);
+    setCorrectArr([])
     setCorrect(0);
     setQuestions([]);
     setModal(false);
@@ -340,15 +453,32 @@ function Game(props){
 
   let redirect;
   if(redirectTo){
-    console.log("REDIRECT")
     redirect = (<Redirect to={redirectTo} />);
   }
-  console.log("game RENDER");
 
   if(loading){
     return(
       <Wrapper><div className="loadFlex"><LoadingSpinner variant={"dots"}/></div></Wrapper>
     )
+  }
+
+  let finishButton;
+  if(userAnswer.length === 10){
+    finishButton = (
+    <button ref={finishRef} className="finishBtn startBtn" onClick={finished}>Finish
+      <div className="startUnderline"></div>
+    </button>
+    );
+    for(let i = 0; i < 10; i++){
+      if(userAnswer[i] === null){
+        finishButton = <div ref={finishRef}></div>;
+      }
+    }
+  }
+
+  function menuNav(id){
+    setIndex(id);
+    showQuestion(questions[id]);
   }
 
   if(questions.length > 0){
@@ -418,16 +548,28 @@ function Game(props){
               onClick={(e) => OnAnswer(e, index)} 
               tabIndex="0" 
               aria-label={he.decode(index)} 
-              className="answer" 
+              className={userAnswer[indexState] === index ? "answer picked" : "answer"}
               key={index}
             >
-              <h3>{he.decode(index)}</h3>
+              <h2>{he.decode(index)}</h2>
               <div className="underline"></div>
               <div className="underUnderline"></div>
             </button>
             )
           })}
         </form>
+        <nav className="selection" role="presentation">
+          {finishButton}
+          <button className="superBtn prevBtn" aria-label="previous question" onClick={(e) => nextOrPrev(e,"prev")}><span className="material-icons">chevron_left</span></button>
+          {questions.map((index, id) => {
+            return(
+              <button key={id} aria-label={"go to question " + (id + 1)} onClick={() => menuNav(id)} className={id === (indexState) ? "superBtnMiniPlus" : "superBtnMini"}>
+                {userAnswer[id] ? <span className="material-icons">done</span> : <div></div>}
+              </button>
+            )
+          })}
+          <button className="superBtn nextBtn" aria-label="next question" onClick={(e) => nextOrPrev(e, "next")}><span className="material-icons">chevron_right</span></button>
+        </nav>
         {modal}
       </Wrapper>
     )
