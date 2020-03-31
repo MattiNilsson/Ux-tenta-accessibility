@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useRef, useEffect} from "react";
 import styled from "styled-components";
 
 import SideBar from "./SideBar";
@@ -57,13 +57,31 @@ footer{
 
 function Header(props){
   const {sidebarHidden, setSidebar} = useContext(SideBarContext);
+  const clickRef = useRef(null)
 
   function onClickSidebar(){
     setSidebar(!sidebarHidden);
   }
+
+  useEffect(() => {
+    document.addEventListener('click', (e) => clickedInside(e))
+    return () => {
+      document.removeEventListener('click', (e) => clickedInside(e))
+    };
+  }, [])
+
+  const clickedInside = (e) => {
+    console.log("HELLO")
+    if (clickRef.current){
+      if (!clickRef.current.contains(e.target)) {
+        setSidebar(true);
+      } 
+    }
+  }
+
   console.log("header render")
   return(
-    <Wrapper aria-label="header">
+    <Wrapper ref={clickRef} aria-label="header">
       <button aria-label={sidebarHidden ? "Open Sidebar" : "Close Sidebar"} className="hamburgerMenuButton" onClick={onClickSidebar}>
         <span className="material-icons">{sidebarHidden ? "list" : "close"}</span>
       </button>
