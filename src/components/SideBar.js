@@ -32,6 +32,7 @@ button{
   border: none;
   background-color: #262626;
   outline: none;
+  cursor: pointer;
 }
 button > span{
   pointer-events: none;

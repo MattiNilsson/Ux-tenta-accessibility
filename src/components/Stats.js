@@ -25,9 +25,7 @@ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.36);
   }
   dt, dd{
     margin-left: 5px;
-  }
-  dd{
-    outline: none;
+    outline: 0px;
   }
   h2{
     width: 450px;
@@ -35,6 +33,9 @@ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.36);
     letter-spacing: 1px;
     font-size: 18px;
     line-height: 1.5;
+  }
+  dd:focus > h2, dt:focus > h2{
+    text-decoration: underline;
   }
   .bottomBorder{
     position: absolute;
@@ -48,6 +49,7 @@ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.36);
     text-align: right;
     position: relative;
     top: -50px;
+    right: 10px;
     font-size: 30px;
     margin-top: 0;
     margin-bottom: 0;
@@ -83,21 +85,21 @@ function Stats(props){
         <Helmet>
           <title>Quiz : Stats</title>
         </Helmet>
-        <div role="article" tabIndex="0" className="overall">
+        <div aria-role="article" tabIndex="0" className="overall">
           <h1 aria-label="stats.">Stats</h1>
           <span aria-hidden="true" className="material-icons icon">bar_chart</span>
           <dl>
             <dt tabIndex="0"><h2>GAMES PLAYED:</h2></dt>
-            <dd tabIndex="0"><h2 className="left" aria-label={saveData.gamesPlayed + ","}>{saveData.gamesPlayed}</h2></dd>
+            <dd tabindex="0"><h2 className="left" aria-label={saveData.gamesPlayed + ","}>{saveData.gamesPlayed}</h2></dd>
             <div className="line"></div>
             <dt tabIndex="0"><h2>CORRECT ANSWERS:</h2></dt>
-            <dd tabIndex="0"><h2 className="left" aria-label={saveData.correctAnswers + ","}>{saveData.correctAnswers}</h2></dd>
+            <dd tabindex="0"><h2 className="left" aria-label={saveData.correctAnswers + ","}>{saveData.correctAnswers}</h2></dd>
             <div className="line"></div>
             <dt tabIndex="0"><h2>INCORRECT ANSWERS:</h2></dt>
-            <dd tabIndex="0"><h2 className="left" aria-label={saveData.incorrectAnswers + ","}>{saveData.incorrectAnswers}</h2></dd>
+            <dd tabindex="0"><h2 className="left" aria-label={saveData.incorrectAnswers + ","}>{saveData.incorrectAnswers}</h2></dd>
             <div className="line"></div>
             <dt tabIndex="0"><h2>CORRECT PRESENTAGE:</h2></dt>
-            <dd tabIndex="0">
+            <dd tabindex="0">
               <h2 
                 className="left"
                 aria-label={Math.round(saveData.correctAnswers / (saveData.correctAnswers + saveData.incorrectAnswers) * 100) + "percent"}>

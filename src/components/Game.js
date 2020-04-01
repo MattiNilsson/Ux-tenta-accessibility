@@ -28,6 +28,7 @@ flex-direction: column;
   color:white;
   font-size: 20px;
   outline: none;
+  cursor: pointer;
 }
 .startUnderline{
   position: absolute;
@@ -83,6 +84,7 @@ flex-direction: column;
   border: none;
   outline: none;
   letter-spacing: 2px;
+  cursor: pointer;
 }
 .underline{
   position:absolute;
@@ -145,6 +147,7 @@ button:hover > .underline{
   background-color: rgba(0,0,0,0);
   font-size: 20px;
   outline: none;
+  cursor: pointer;
 }
 .modalUnderline{
   position:absolute;
@@ -214,6 +217,7 @@ button:hover > .underline{
   border-radius: 50px;
   background-color: rgba(0,0,0,0);
   color: #f55b14;
+  cursor: pointer;
 }
 .superBtn:hover, .superBtn:focus{
   border-color: white;
@@ -235,6 +239,7 @@ button:hover > .underline{
   border-radius: 50px;
   background-color: rgba(0,0,0,0);
   color: #f55b14;
+  cursor: pointer;
 }
 .superBtnMiniPlus{
   margin-left: 4px;
@@ -245,6 +250,7 @@ button:hover > .underline{
   border-radius: 50px;
   background-color: rgba(0,0,0,0);
   color: white;
+  cursor: pointer;
 }
 .superBtnMini > span, .superBtnMiniPlus > span {
   position: relative;

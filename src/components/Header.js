@@ -26,6 +26,7 @@ z-index: 5;
   background-color: #404040;
   transition: .2s ease-out all;
   outline: none;
+  cursor: pointer;
 }
 .hamburgerMenuButton:focus{
   background-color: #f55b14;
