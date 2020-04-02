@@ -159,6 +159,17 @@ button:hover > .underline{
   border-bottom: 2px solid #f55b14;
   background-color: rgba(245, 91, 20, 0);
   transition: 0.3s ease-out all;
+  z-index: 1;
+}
+.modalUnderUnderline{
+  position:absolute;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  height: 2px;
+  width: 150px;
+  background-color: lightgray;
+  z-index: 0;
 }
 .modalButton:hover > .modalUnderline{
   width: 150px;
@@ -505,17 +516,17 @@ function Game(props){
             <div className="buttonWrapper">
               <button className="modalButton" onClick={(e) => modalButtons(e)} value="/stats">
                 <div className="modalFlex">
-                  <span className="material-icons">bar_chart</span>
                   <h3>Stats</h3>
                 </div>
                 <div className="modalUnderline"></div>
+                <div className="modalUnderUnderline"></div>
               </button>
               <button className="modalButton" onClick={restartGame} value="/game">
                 <div className="modalFlex">
-                  <span className="material-icons">autorenew</span>
                   <h3>Restart</h3>
                 </div>
                 <div className="modalUnderline"></div>
+                <div className="modalUnderUnderline"></div>
               </button>
             </div>
             <div className="underlineStyle"></div>
